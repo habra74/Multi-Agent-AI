@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>투자 분석 리포트 — {{report_date}}</title>
+  <style>
+    /* ── Base ── */
+    body {
+      margin: 0; padding: 0;
+      background-color: #f0f2f5;
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', Arial, sans-serif;
+      color: #1a1a2e;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 680px;
+      margin: 24px auto;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+      color: #ffffff;
+      padding: 32px 36px 24px;
+    }
+    .header h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .header .subtitle {
+      margin: 0;
+      font-size: 13px;
+      color: #a8c6e0;
+    }
+    .header .date-badge {
+      display: inline-block;
+      margin-top: 12px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: #d4e8f7;
+    }
+
+    /* ── Summary bar ── */
+    .summary-bar {
+      background: #e8f4fd;
+      border-left: 4px solid #1a7abf;
+      padding: 14px 36px;
+      font-size: 13px;
+      color: #2c5f82;
+    }
+    .summary-bar strong { color: #0f3460; }
+
+    /* ── Ticker cards ── */
+    .cards-section {
+      padding: 20px 28px;
+    }
+    .ticker-card {
+      background: #fafbfc;
+      border: 1px solid #e3e8ee;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e3e8ee;
+      background: #f5f7fa;
+    }
+    .card-ticker {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f3460;
+    }
+    .card-name {
+      font-size: 12px;
+      color: #6b7c93;
+      margin-top: 2px;
+    }
+    .verdict-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+    .verdict-STRONG_BUY    { background: #1a7a1a; }
+    .verdict-BUY           { background: #3da13d; }
+    .verdict-HOLD          { background: #9c8c00; }
+    .verdict-CAUTIOUS_HOLD { background: #c06000; }
+    .verdict-AVOID         { background: #c0392b; }
+
+    .card-body { padding: 14px 18px; }
+
+    /* confidence + risk row */
+    .meta-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    .meta-item {
+      flex: 1;
+      background: #f0f2f5;
+      border-radius: 6px;
+      padding: 8px 12px;
+    }
+    .meta-label {
+      font-size: 11px;
+      color: #8898a4;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .meta-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-top: 2px;
+    }
+
+    /* Executive summary */
+    .exec-summary {
+      font-size: 13px;
+      color: #3a3a5c;
+      background: #f7f9fc;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      border-left: 3px solid #4a90d9;
+    }
+
+    /* Bull / Bear lists */
+    .signal-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .signal-box {
+      flex: 1;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+    .signal-box.bull {
+      background: #edfaed;
+      border: 1px solid #b7e4b7;
+    }
+    .signal-box.bear {
+      background: #fdf0ed;
+      border: 1px solid #f0bfb7;
+    }
+    .signal-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .signal-box.bull .signal-title { color: #1a7a1a; }
+    .signal-box.bear .signal-title { color: #c0392b; }
+    .signal-box ul {
+      margin: 0; padding-left: 16px;
+      color: #3a3a3a;
+    }
+    .signal-box li { margin-bottom: 3px; }
+
+    /* ── News section ── */
+    .news-section {
+      background: #f7f9fc;
+      border: 1px solid #d8e4f0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-weight: 700;
+      font-size: 11px;
+      color: #0f3460;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .news-item {
+      border-bottom: 1px solid #e8eef6;
+      padding: 8px 0;
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-meta {
+      margin-bottom: 3px;
+    }
+    .news-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      border: 1px solid;
+      border-radius: 10px;
+      padding: 1px 7px;
+      margin-right: 5px;
+    }
+    .news-cat {
+      font-size: 11px;
+      color: #8898a4;
+    }
+    .news-headline {
+      font-size: 12px;
+      color: #1a1a2e;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .news-interp {
+      font-size: 11px;
+      color: #4a5568;
+      font-style: italic;
+      margin-bottom: 3px;
+    }
+
+    /* Watch items */
+    .watch-section {
+      background: #fffbea;
+      border: 1px solid #f0de8a;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+    .watch-section .watch-title {
+      font-weight: 700;
+      color: #7a6000;
+      margin-bottom: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .watch-section ul {
+      margin: 0; padding-left: 16px; color: #5a4a00;
+    }
+    .watch-section li { margin-bottom: 3px; }
+
+    /* ── Footer ── */
+    .footer {
+      background: #f5f7fa;
+      padding: 24px 36px;
+      text-align: center;
+      border-top: 1px solid #e3e8ee;
+      font-size: 12px;
+      color: #8898a4;
+    }
+    .cta-button {
+      display: inline-block;
+      margin: 12px 0 6px;
+      padding: 12px 28px;
+      background: #0f3460;
+      color: #ffffff !important;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+    }
+    .footer .local-notice {
+      font-size: 11px;
+      color: #aab0bb;
+      margin: 4px 0 10px;
+    }
+    .footer .disclaimer {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #aab0bb;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: #e3e8ee;
+      margin: 0 28px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>투자 분석 리포트</h1>
+    <p class="subtitle">Multi-Agent Investment Analysis System</p>
+    <span class="date-badge">{{report_date}}</span>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="summary-bar">
+    오늘 <strong>{{ticker_count}}개 종목</strong> 분석 완료 &nbsp;|&nbsp;
+    분석 기준: <strong>{{report_date}}</strong>
+  </div>
+
+  <!-- Ticker cards -->
+  <div class="cards-section">
+    {{ticker_cards}}
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <a class="cta-button" href="{{dashboard_url}}">대시보드에서 상세 보기</a>
+    {{local_notice}}
+    <p class="disclaimer">
+      본 메일은 AI가 자동 생성한 참고 자료입니다.<br>
+      투자 조언이 아니며, 실제 투자 결정 전 전문가 상담을 권장합니다.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

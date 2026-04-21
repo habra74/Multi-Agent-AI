@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# 가상환경
+venv/
+.venv/
+env/
+.env/
+
+# 환경변수 (절대 커밋 금지)
+.env
+*.env.local
+
+# DB / 데이터
+db/*.db
+db/*.db-shm
+db/*.db-wal
+
+# 로그
+logs/
+*.log
+
+# Streamlit
+.streamlit/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docker 관련 (로컬 빌드 캐시)
+.dockerignore

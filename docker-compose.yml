@@ -1,0 +1,56 @@
+# ============================================================
+# docker-compose.yml — 투자 분석 시스템
+# ============================================================
+# 실행:   docker-compose up -d
+# 중단:   docker-compose down
+# 로그:   docker-compose logs -f
+# ============================================================
+
+version: "3.9"
+
+# ── 공유 볼륨 ────────────────────────────────────────────────
+volumes:
+  app-db:
+    driver: local
+  app-logs:
+    driver: local
+
+# ── 공통 설정 (앵커) ──────────────────────────────────────────
+x-common: &common
+  image: investment-system:latest
+  build:
+    context: .
+    dockerfile: Dockerfile
+  env_file:
+    - .env
+  volumes:
+    - app-db:/app/db
+    - app-logs:/app/logs
+  restart: unless-stopped
+
+services:
+  # ── 대시보드 ─────────────────────────────────────────────
+  dashboard:
+    <<: *common
+    container_name: investment-dashboard
+    command: dashboard
+    ports:
+      - "8501:8501"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ── 스케줄러 ─────────────────────────────────────────────
+  scheduler:
+    <<: *common
+    container_name: investment-scheduler
+    command: scheduler
+    # 스케줄러는 포트 불필요
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 60s
+      timeout: 5s
+      retries: 2
