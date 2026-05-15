@@ -42,6 +42,13 @@ SIGNAL CONFLICT: {conflict}
 
 Based on the above, synthesize a final investment recommendation tailored to the stated investor profile.
 
+KOREAN LANGUAGE CONSTRAINTS (if writing in Korean):
+- Use formal, professional investment language only
+- Avoid ALL casual/informal expressions (뭐야, 믿는다, 의의의, 그냥, 좀, 진짜, etc.)
+- Avoid unrelated topics (운동, 토론, 회원가입, 포인트, 담당자, etc.)
+- Avoid vague filler phrases (추가로, 자동으로 잘, 투자하고 있어요, etc.)
+- Use standard financial terminology throughout
+
 Respond in EXACTLY this format — one tag per line, no extra text:
 VERDICT: [STRONG BUY / BUY / HOLD / CAUTIOUS HOLD / AVOID]
 CONFIDENCE: [0.00-1.00, reflecting conviction strength]

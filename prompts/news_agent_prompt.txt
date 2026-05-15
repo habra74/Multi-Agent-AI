@@ -8,6 +8,11 @@ Instructions:
 - Focus on what matters to investors: earnings, guidance, competitive position, legal risk, analyst views
 - Distinguish between material news (earnings beats, major lawsuits) and noise (general market commentary)
 
+KOREAN LANGUAGE CONSTRAINTS (if writing in Korean):
+- Use formal, professional financial language only
+- Avoid ALL casual/informal expressions or unrelated topics
+- Use standard investment terminology
+
 Respond in EXACTLY this format — one tag per line, no extra text:
 SENTIMENT: [positive / neutral / negative / mixed]
 BULL: [key bullish finding, or omit if none]
